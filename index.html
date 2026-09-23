@@ -1,1921 +1,1428 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-  <meta name="theme-color" content="#05050b" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-
-  <title>BAC DZ 🇩🇿</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      background: #05050b;
-      color: #f7f7ff;
-      font-family: Arial, "Tahoma", sans-serif;
-    }
-
-    body {
-      overflow-x: hidden;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    /* =========================
-       SPLASH SCREEN
-    ========================= */
-
-    #splash {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        radial-gradient(circle at 50% 35%, rgba(112,97,255,.20), transparent 35%),
-        linear-gradient(180deg, #030309, #080714 65%, #030309);
-      transition: opacity .5s ease, visibility .5s ease;
-    }
-
-    #splash.hide {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .splash-content {
-      width: 90%;
-      max-width: 360px;
-      text-align: center;
-      animation: splashIn .8s ease;
-    }
-
-    @keyframes splashIn {
-      from {
-        opacity: 0;
-        transform: scale(.94) translateY(15px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    .splash-logo {
-      width: 145px;
-      height: 145px;
-      margin: 0 auto 24px;
-      border-radius: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background:
-        linear-gradient(145deg, #111120, #07070e);
-      border: 1px solid rgba(145,127,255,.5);
-      box-shadow:
-        0 0 30px rgba(112,97,255,.25),
-        inset 0 0 30px rgba(112,97,255,.06);
-    }
-
-    .splash-logo::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 31px;
-      border: 1px solid rgba(145,127,255,.22);
-    }
-
-    .logo-text {
-      position: relative;
-      line-height: .8;
-      font-weight: 900;
-      letter-spacing: -3px;
-    }
-
-    .logo-bac {
-      display: block;
-      color: #ffffff;
-      font-size: 43px;
-    }
-
-    .logo-dz {
-      display: block;
-      color: #917fff;
-      font-size: 38px;
-      margin-top: 7px;
-    }
-
-    .splash-title {
-      font-size: 30px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .splash-subtitle {
-      color: #aaa9bd;
-      font-size: 15px;
-      margin-bottom: 28px;
-    }
-
-    .loading {
-      width: 150px;
-      height: 4px;
-      margin: auto;
-      border-radius: 10px;
-      background: #202034;
-      overflow: hidden;
-    }
-
-    .loading span {
-      display: block;
-      width: 45%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #7061ff, #b49dff);
-      animation: loading 1.2s ease infinite;
-    }
-
-    @keyframes loading {
-      0% {
-        transform: translateX(220%);
-      }
-      100% {
-        transform: translateX(-220%);
-      }
-    }
-
-    /* =========================
-       APP
-    ========================= */
-
-    #app {
-      min-height: 100vh;
-      padding-bottom: 92px;
-    }
-
-    .container {
-      width: min(100% - 30px, 720px);
-      margin: auto;
-    }
-
-    .topbar {
-      height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #10101c;
-      border: 1px solid #292642;
-      box-shadow: 0 0 18px rgba(112,97,255,.12);
-    }
-
-    .brand-icon strong {
-      font-size: 15px;
-      line-height: .8;
-    }
-
-    .brand-icon span {
-      color: #917fff;
-    }
-
-    .brand-name {
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .brand-name span {
-      color: #917fff;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .icon-btn {
-      width: 42px;
-      height: 42px;
-      border: 1px solid #222236;
-      border-radius: 13px;
-      background: #0c0c16;
-      color: #fff;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .icon-btn:active {
-      transform: scale(.95);
-    }
-
-    /* =========================
-       HERO
-    ========================= */
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 27px 23px;
-      border-radius: 26px;
-      background:
-        radial-gradient(circle at 85% 15%, rgba(112,97,255,.22), transparent 32%),
-        linear-gradient(145deg, #111020, #090912);
-      border: 1px solid #25243d;
-      box-shadow: 0 20px 50px rgba(0,0,0,.22);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      left: -100px;
-      bottom: -110px;
-      border-radius: 50%;
-      background: rgba(112,97,255,.10);
-      filter: blur(30px);
-    }
-
-    .hero small {
-      color: #9b91d7;
-      font-size: 13px;
-    }
-
-    .hero h1 {
-      margin: 10px 0 9px;
-      font-size: 30px;
-      line-height: 1.2;
-    }
-
-    .hero h1 span {
-      color: #917fff;
-    }
-
-    .hero p {
-      color: #aaa9b9;
-      line-height: 1.8;
-      margin: 0 0 20px;
-      font-size: 14px;
-    }
-
-    .hero-btn {
-      border: 0;
-      padding: 13px 18px;
-      border-radius: 14px;
-      color: white;
-      background: linear-gradient(135deg, #7061ff, #8e7cff);
-      box-shadow: 0 8px 25px rgba(112,97,255,.22);
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    /* =========================
-       SECTIONS
-    ========================= */
-
-    .section {
-      margin-top: 28px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      font-size: 19px;
-      font-weight: 900;
-    }
-
-    .section-more {
-      color: #9188b7;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* =========================
-       BRANCHES
-    ========================= */
-
-    .branches {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .branch {
-      position: relative;
-      overflow: hidden;
-      min-height: 145px;
-      padding: 18px;
-      border-radius: 21px;
-      border: 1px solid #25243a;
-      background: #0c0c16;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .branch:active {
-      transform: scale(.97);
-    }
-
-    .branch.science {
-      background:
-        radial-gradient(circle at 85% 10%, rgba(112,97,255,.19), transparent 40%),
-        #0c0c16;
-    }
-
-    .branch.literature {
-      background:
-        radial-gradient(circle at 85% 10%, rgba(59,130,246,.14), transparent 40%),
-        #0c0c16;
-    }
-
-    .branch-icon {
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 14px;
-      background: #151526;
-      margin-bottom: 14px;
-      font-size: 22px;
-    }
-
-    .branch h3 {
-      margin: 0 0 5px;
-      font-size: 16px;
-    }
-
-    .branch p {
-      margin: 0;
-      color: #858598;
-      font-size: 12px;
-    }
-
-    /* =========================
-       SUBJECTS
-    ========================= */
-
-    .subjects {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 5px;
-      scrollbar-width: none;
-    }
-
-    .subjects::-webkit-scrollbar {
-      display: none;
-    }
-
-    .subject {
-      min-width: 145px;
-      padding: 17px;
-      border-radius: 18px;
-      background: #0d0d18;
-      border: 1px solid #222237;
-      cursor: pointer;
-    }
-
-    .subject-icon {
-      font-size: 23px;
-      margin-bottom: 13px;
-    }
-
-    .subject strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .subject small {
-      color: #77778a;
-    }
-
-    /* =========================
-       LESSONS
-    ========================= */
-
-    .lesson-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .lesson {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 14px;
-      background: #0d0d18;
-      border: 1px solid #222237;
-      border-radius: 17px;
-      cursor: pointer;
-    }
-
-    .lesson-num {
-      width: 40px;
-      height: 40px;
-      flex: 0 0 auto;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #16152a;
-      color: #a494ff;
-      font-weight: 900;
-    }
-
-    .lesson-info {
-      flex: 1;
-    }
-
-    .lesson-info strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .lesson-info small {
-      color: #77778b;
-    }
-
-    .arrow {
-      color: #6d6d7d;
-      font-size: 18px;
-    }
-
-    /* =========================
-       PAGE
-    ========================= */
-
-    .page {
-      display: none;
-      animation: pageIn .25s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes pageIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .page-title {
-      font-size: 27px;
-      font-weight: 900;
-      margin: 20px 0 6px;
-    }
-
-    .page-subtitle {
-      color: #878799;
-      font-size: 13px;
-      margin-bottom: 22px;
-    }
-
-    .back-btn {
-      margin-top: 18px;
-      border: 1px solid #24243a;
-      background: #0d0d18;
-      color: #ddd;
-      border-radius: 12px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-
-    /* =========================
-       LESSON ARTICLE
-    ========================= */
-
-    .article {
-      background: #0d0d18;
-      border: 1px solid #24243a;
-      border-radius: 22px;
-      padding: 20px;
-      line-height: 2;
-    }
-
-    .article h2 {
-      margin-top: 0;
-      font-size: 21px;
-    }
-
-    .article h3 {
-      margin-top: 24px;
-      color: #a494ff;
-    }
-
-    .article p {
-      color: #b4b3c2;
-      font-size: 14px;
-    }
-
-    .formula {
-      direction: ltr;
-      text-align: center;
-      padding: 16px;
-      margin: 15px 0;
-      border-radius: 15px;
-      background: #07070f;
-      border: 1px solid #272642;
-      color: #b09fff;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    /* =========================
-       QUIZ
-    ========================= */
-
-    .quiz-card {
-      background: #0d0d18;
-      border: 1px solid #24243a;
-      border-radius: 22px;
-      padding: 20px;
-    }
-
-    .quiz-progress {
-      height: 5px;
-      background: #202033;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .quiz-progress span {
-      display: block;
-      width: 33%;
-      height: 100%;
-      background: #8170ff;
-    }
-
-    .question {
-      font-size: 18px;
-      line-height: 1.7;
-      font-weight: 800;
-      margin-bottom: 20px;
-    }
-
-    .answers {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .answer {
-      text-align: right;
-      padding: 15px;
-      border-radius: 15px;
-      background: #111121;
-      border: 1px solid #29283e;
-      color: #ddd;
-      cursor: pointer;
-    }
-
-    .answer.selected {
-      border-color: #8170ff;
-      background: rgba(112,97,255,.12);
-    }
-
-    .answer.correct {
-      border-color: #20d6a0;
-      background: rgba(32,214,160,.10);
-    }
-
-    .answer.wrong {
-      border-color: #ff5577;
-      background: rgba(255,85,119,.10);
-    }
-
-    .quiz-next {
-      width: 100%;
-      margin-top: 18px;
-      padding: 14px;
-      border: 0;
-      border-radius: 15px;
-      color: #fff;
-      background: #7061ff;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    /* =========================
-       PROGRESS
-    ========================= */
-
-    .progress-card {
-      background: #0d0d18;
-      border: 1px solid #24243a;
-      border-radius: 21px;
-      padding: 18px;
-      margin-bottom: 12px;
-    }
-
-    .progress-head {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 11px;
-    }
-
-    .progress-head small {
-      color: #88889a;
-    }
-
-    .progress-bar {
-      height: 8px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: #202032;
-    }
-
-    .progress-bar span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #7061ff, #a491ff);
-    }
-
-    /* =========================
-       BOTTOM NAV
-    ========================= */
-
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: 12px;
-      transform: translateX(-50%);
-      z-index: 1000;
-      width: min(calc(100% - 22px), 650px);
-      padding: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
-      border: 1px solid #25243a;
-      border-radius: 22px;
-      background: rgba(10,10,18,.92);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 15px 45px rgba(0,0,0,.35);
-    }
-
-    .nav-item {
-      border: 0;
-      background: transparent;
-      color: #6f6f82;
-      padding: 9px 4px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 11px;
-    }
-
-    .nav-item .nav-icon {
-      display: block;
-      font-size: 19px;
-      margin-bottom: 4px;
-    }
-
-    .nav-item.active {
-      color: #a596ff;
-      background: rgba(112,97,255,.11);
-    }
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 100px;
-      transform: translate(-50%, 20px);
-      z-index: 5000;
-      opacity: 0;
-      pointer-events: none;
-      padding: 12px 18px;
-      border-radius: 14px;
-      background: #161624;
-      border: 1px solid #302e4a;
-      color: #eee;
-      font-size: 13px;
-      transition: .3s ease;
-      white-space: nowrap;
-    }
-
-    #toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    /* =========================
-       EMPTY
-    ========================= */
-
-    .empty {
-      text-align: center;
-      padding: 45px 20px;
-      color: #77778a;
-    }
-
-    .empty-icon {
-      font-size: 40px;
-      margin-bottom: 12px;
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
-    @media (max-width: 380px) {
-      .hero h1 {
-        font-size: 26px;
-      }
-
-      .branches {
-        grid-template-columns: 1fr;
-      }
-
-      .branch {
-        min-height: 125px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050509">
+<meta name="mobile-web-app-capable" content="yes">
+
+<title>BAC DZ 🇩🇿</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#050509;
+  color:#f7f7ff;
+  font-family:Arial,Tahoma,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button{
+  font:inherit;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+#splash{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(125,95,255,.22),transparent 35%),
+    #050509;
+  transition:.5s;
+}
+
+#splash.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.splash-box{
+  width:90%;
+  max-width:360px;
+}
+
+.logo{
+  width:130px;
+  height:130px;
+  margin:auto;
+  border-radius:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#151421,#08080d);
+  border:1px solid #5f50d9;
+  box-shadow:0 0 45px rgba(112,97,255,.28);
+}
+
+.logo strong{
+  font-size:39px;
+  line-height:.8;
+  letter-spacing:-3px;
+}
+
+.logo strong span{
+  display:block;
+  color:#947fff;
+  margin-top:8px;
+}
+
+.splash-box h1{
+  margin:25px 0 8px;
+  font-size:30px;
+}
+
+.splash-box p{
+  margin:0 0 25px;
+  color:#9998aa;
+}
+
+.loader{
+  width:150px;
+  height:4px;
+  margin:auto;
+  overflow:hidden;
+  border-radius:20px;
+  background:#20202e;
+}
+
+.loader span{
+  display:block;
+  width:45%;
+  height:100%;
+  background:#806cff;
+  animation:load 1.2s infinite;
+}
+
+@keyframes load{
+  from{transform:translateX(220%)}
+  to{transform:translateX(-220%)}
+}
+
+#app{
+  min-height:100vh;
+  padding-bottom:95px;
+}
+
+.container{
+  width:min(calc(100% - 28px),720px);
+  margin:auto;
+}
+
+.topbar{
+  height:75px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand-icon{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#11111c;
+  border:1px solid #292742;
+  font-weight:900;
+  line-height:.8;
+}
+
+.brand-icon span,
+.brand-name span{
+  color:#947fff;
+}
+
+.brand-name{
+  font-size:20px;
+  font-weight:900;
+}
+
+.top-actions{
+  display:flex;
+  gap:8px;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border:1px solid #24243a;
+  border-radius:13px;
+  background:#0d0d15;
+  color:white;
+  cursor:pointer;
+}
+
+.page{
+  display:none;
+  animation:pageIn .25s ease;
+}
+
+.page.active{
+  display:block;
+}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:27px 22px;
+  border-radius:27px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(125,95,255,.23),transparent 35%),
+    linear-gradient(145deg,#12101f,#09090f);
+  border:1px solid #292641;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.hero small{
+  color:#a59bd9;
+}
+
+.hero h1{
+  margin:12px 0;
+  font-size:31px;
+  line-height:1.25;
+}
+
+.hero h1 span{
+  color:#947fff;
+}
+
+.hero p{
+  color:#aaa9b8;
+  line-height:1.8;
+  margin:0 0 20px;
+}
+
+.primary{
+  border:0;
+  border-radius:15px;
+  padding:14px 20px;
+  color:white;
+  font-weight:900;
+  background:linear-gradient(135deg,#6f5cff,#907cff);
+  box-shadow:0 10px 30px rgba(112,97,255,.25);
+  cursor:pointer;
+}
+
+.section{
+  margin-top:28px;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.section-title{
+  font-size:19px;
+  font-weight:900;
+}
+
+.more{
+  color:#948cb9;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.branches{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.branch{
+  min-height:145px;
+  padding:18px;
+  border-radius:22px;
+  background:#0d0d16;
+  border:1px solid #25243a;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.branch.science{
+  background:
+    radial-gradient(circle at 90% 5%,rgba(117,94,255,.2),transparent 42%),
+    #0d0d16;
+}
+
+.branch.literature{
+  background:
+    radial-gradient(circle at 90% 5%,rgba(59,130,246,.16),transparent 42%),
+    #0d0d16;
+}
+
+.branch-icon{
+  width:46px;
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:#171625;
+  font-size:23px;
+  margin-bottom:15px;
+}
+
+.branch h3{
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.branch p{
+  margin:0;
+  color:#858596;
+  font-size:12px;
+  line-height:1.6;
+}
+
+.subjects{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding-bottom:5px;
+}
+
+.subjects::-webkit-scrollbar{
+  display:none;
+}
+
+.subject{
+  min-width:145px;
+  padding:17px;
+  border-radius:18px;
+  background:#0d0d17;
+  border:1px solid #25243a;
+  cursor:pointer;
+}
+
+.subject-icon{
+  font-size:24px;
+  margin-bottom:12px;
+}
+
+.subject strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.subject small{
+  color:#77778a;
+}
+
+.lesson-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.lesson{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:14px;
+  border-radius:17px;
+  background:#0d0d17;
+  border:1px solid #25243a;
+  cursor:pointer;
+}
+
+.lesson-num{
+  width:41px;
+  height:41px;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#17152a;
+  color:#a796ff;
+  font-weight:900;
+}
+
+.lesson-info{
+  flex:1;
+}
+
+.lesson-info strong{
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+}
+
+.lesson-info small{
+  color:#77778a;
+}
+
+.arrow{
+  color:#666678;
+  font-size:20px;
+}
+
+.page-title{
+  margin:20px 0 7px;
+  font-size:28px;
+  font-weight:900;
+}
+
+.page-subtitle{
+  margin-bottom:22px;
+  color:#878799;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.article,
+.quiz-card,
+.progress-card{
+  background:#0d0d17;
+  border:1px solid #25243a;
+  border-radius:22px;
+  padding:20px;
+}
+
+.article{
+  line-height:2;
+}
+
+.article h2{
+  margin-top:0;
+}
+
+.article h3{
+  color:#a796ff;
+  margin-top:25px;
+}
+
+.article p{
+  color:#b5b4c2;
+  font-size:14px;
+}
+
+.notice{
+  padding:13px 15px;
+  margin:15px 0;
+  border-radius:14px;
+  background:rgba(112,97,255,.08);
+  border:1px solid rgba(112,97,255,.22);
+  color:#bcb5df;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.formula{
+  direction:ltr;
+  text-align:center;
+  padding:17px;
+  margin:16px 0;
+  border-radius:15px;
+  background:#07070e;
+  border:1px solid #292744;
+  color:#b09fff;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.back{
+  margin:18px 0 5px;
+  padding:10px 15px;
+  border-radius:12px;
+  background:#0d0d17;
+  color:#ddd;
+  border:1px solid #25243a;
+  cursor:pointer;
+}
+
+.quiz-progress{
+  height:6px;
+  margin-bottom:22px;
+  border-radius:20px;
+  background:#202031;
+  overflow:hidden;
+}
+
+.quiz-progress span{
+  display:block;
+  width:0;
+  height:100%;
+  background:#806cff;
+}
+
+.question{
+  font-size:18px;
+  line-height:1.7;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.answers{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.answer{
+  padding:15px;
+  border-radius:15px;
+  background:#111120;
+  border:1px solid #29283e;
+  color:#ddd;
+  text-align:right;
+  cursor:pointer;
+}
+
+.answer.selected{
+  border-color:#806cff;
+  background:rgba(112,97,255,.12);
+}
+
+.answer.correct{
+  border-color:#20d6a0;
+  background:rgba(32,214,160,.1);
+}
+
+.answer.wrong{
+  border-color:#ff5577;
+  background:rgba(255,85,119,.1);
+}
+
+.quiz-next{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:0;
+  border-radius:15px;
+  background:#7061ff;
+  color:white;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.progress-card{
+  margin-bottom:12px;
+}
+
+.progress-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.progress-head small{
+  color:#88889a;
+}
+
+.progress-bar{
+  height:8px;
+  border-radius:20px;
+  background:#202032;
+  overflow:hidden;
+}
+
+.progress-bar span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#7061ff,#a491ff);
+}
+
+.empty{
+  padding:45px 20px;
+  text-align:center;
+  color:#77778a;
+  line-height:1.8;
+}
+
+.bottom-nav{
+  position:fixed;
+  z-index:1000;
+  bottom:11px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(calc(100% - 22px),650px);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  padding:8px;
+  border-radius:22px;
+  border:1px solid #29283d;
+  background:rgba(10,10,17,.94);
+  backdrop-filter:blur(20px);
+  box-shadow:0 15px 45px rgba(0,0,0,.4);
+}
+
+.nav-item{
+  border:0;
+  background:transparent;
+  color:#707082;
+  border-radius:15px;
+  padding:9px 3px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.nav-icon{
+  display:block;
+  font-size:19px;
+  margin-bottom:4px;
+}
+
+.nav-item.active{
+  color:#a696ff;
+  background:rgba(112,97,255,.11);
+}
+
+#toast{
+  position:fixed;
+  z-index:5000;
+  left:50%;
+  bottom:100px;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  padding:12px 18px;
+  border-radius:14px;
+  background:#171722;
+  border:1px solid #33314b;
+  color:#eee;
+  font-size:13px;
+  transition:.3s;
+  white-space:nowrap;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+@media(max-width:380px){
+  .branches,
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- =========================
-       SPLASH
-  ========================= -->
+<div id="splash">
+  <div class="splash-box">
+    <div class="logo">
+      <strong>BAC<span>DZ</span></strong>
+    </div>
 
-  <div id="splash">
-    <div class="splash-content">
+    <h1>BAC DZ 🇩🇿</h1>
+    <p>مراجعتك نحو البكالوريا تبدأ هنا</p>
 
-      <div class="splash-logo">
-        <div class="logo-text">
-          <span class="logo-bac">BAC</span>
-          <span class="logo-dz">DZ</span>
-        </div>
+    <div class="loader">
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<main id="app">
+
+<div class="container">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">
+      BAC<br><span>DZ</span>
+    </div>
+
+    <div class="brand-name">
+      BAC <span>DZ</span>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="icon-btn"
+      onclick="showToast('الإشعارات قادمة قريبًا 🔔')">🔔</button>
+
+    <button class="icon-btn"
+      onclick="showToast('الإعدادات قادمة قريبًا ⚙️')">⚙️</button>
+  </div>
+</header>
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+  <div class="hero">
+    <small>🇩🇿 منصة مراجعة البكالوريا</small>
+
+    <h1>
+      حضّر للـ <span>BAC</span><br>
+      بطريقة أذكى 🚀
+    </h1>
+
+    <p>
+      دروس، اختبارات وتمارين وتتبع للتقدم
+      في مكان واحد.
+    </p>
+
+    <button class="primary" onclick="openBranches()">
+      ابدأ المراجعة ←
+    </button>
+  </div>
+
+  <div class="section">
+
+    <div class="section-head">
+      <div class="section-title">اختر شعبتك</div>
+      <div class="more" onclick="openBranches()">الكل</div>
+    </div>
+
+    <div class="branches">
+
+      <div class="branch science"
+        onclick="selectBranch('science')">
+
+        <div class="branch-icon">🧪</div>
+
+        <h3>علوم تجريبية</h3>
+
+        <p>الرياضيات • الفيزياء • العلوم</p>
       </div>
 
-      <div class="splash-title">
-        BAC DZ 🇩🇿
-      </div>
+      <div class="branch literature"
+        onclick="selectBranch('literature')">
 
-      <div class="splash-subtitle">
-        مراجعتك نحو البكالوريا تبدأ هنا
-      </div>
+        <div class="branch-icon">📚</div>
 
-      <div class="loading">
-        <span></span>
+        <h3>آداب وفلسفة</h3>
+
+        <p>العربية • الفلسفة • التاريخ</p>
       </div>
 
     </div>
   </div>
 
-  <!-- =========================
-       APP
-  ========================= -->
-
-  <main id="app">
-
-    <div class="container">
-
-      <!-- TOPBAR -->
-
-      <header class="topbar">
-
-        <div class="brand">
-
-          <div class="brand-icon">
-            <strong>BAC<br><span>DZ</span></strong>
-          </div>
-
-          <div class="brand-name">
-            BAC <span>DZ</span>
-          </div>
-
-        </div>
-
-        <div class="top-actions">
-          <button class="icon-btn" onclick="showToast('الإشعارات قادمة قريبًا 🔔')">
-            🔔
-          </button>
-
-          <button class="icon-btn" onclick="showToast('الإعدادات قادمة قريبًا ⚙️')">
-            ⚙️
-          </button>
-        </div>
-
-      </header>
-
-      <!-- =========================
-           HOME
-      ========================= -->
-
-      <section id="home" class="page active">
-
-        <div class="hero">
-
-          <small>🇩🇿 منصة البكالوريا الجزائرية</small>
-
-          <h1>
-            حضّر للـ <span>BAC</span><br />
-            بطريقة أذكى 🚀
-          </h1>
-
-          <p>
-            دروس، مراجعة، اختبارات وتتبع للتقدم
-            في مكان واحد.
-          </p>
-
-          <button class="hero-btn" onclick="openBranchPage()">
-            ابدأ المراجعة ←
-          </button>
-
-        </div>
-
-        <!-- BRANCHES -->
-
-        <div class="section">
-
-          <div class="section-head">
-            <div class="section-title">
-              اختر شعبتك
-            </div>
-
-            <div class="section-more"
-                 onclick="openBranchPage()">
-              الكل
-            </div>
-          </div>
-
-          <div class="branches">
-
-            <div class="branch science"
-                 onclick="selectBranch('science')">
-
-              <div class="branch-icon">
-                🧪
-              </div>
-
-              <h3>
-                علوم تجريبية
-              </h3>
-
-              <p>
-                الرياضيات • الفيزياء • العلوم
-              </p>
-
-            </div>
-
-            <div class="branch literature"
-                 onclick="selectBranch('literature')">
-
-              <div class="branch-icon">
-                📚
-              </div>
-
-              <h3>
-                آداب وفلسفة
-              </h3>
-
-              <p>
-                العربية • الفلسفة • التاريخ
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- SUBJECTS -->
-
-        <div class="section">
-
-          <div class="section-head">
-            <div class="section-title">
-              موادك
-            </div>
-
-            <div class="section-more"
-                 onclick="openSubjects()">
-              عرض الكل
-            </div>
-          </div>
-
-          <div id="homeSubjects" class="subjects"></div>
-
-        </div>
-
-        <!-- LESSONS -->
-
-        <div class="section">
-
-          <div class="section-head">
-
-            <div class="section-title">
-              أكمل مراجعتك
-            </div>
-
-            <div class="section-more"
-                 onclick="openLessons()">
-              المزيد
-            </div>
-
-          </div>
-
-          <div class="lesson-list">
-
-            <div class="lesson"
-                 onclick="openLesson('المتتاليات العددية')">
-
-              <div class="lesson-num">
-                01
-              </div>
-
-              <div class="lesson-info">
-                <strong>
-                  المتتاليات العددية
-                </strong>
-
-                <small>
-                  الرياضيات • 15 دقيقة
-                </small>
-              </div>
-
-              <div class="arrow">
-                ‹
-              </div>
-
-            </div>
-
-            <div class="lesson"
-                 onclick="openLesson('الحركة')">
-
-              <div class="lesson-num">
-                02
-              </div>
-
-              <div class="lesson-info">
-                <strong>
-                  الحركة
-                </strong>
-
-                <small>
-                  الفيزياء • 20 دقيقة
-                </small>
-              </div>
-
-              <div class="arrow">
-                ‹
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- =========================
-           BRANCH PAGE
-      ========================= -->
-
-      <section id="branchesPage" class="page">
-
-        <div class="page-title">
-          الشعب
-        </div>
-
-        <div class="page-subtitle">
-          اختر الشعبة باش تشوف المواد والدروس.
-        </div>
-
-        <div class="branches">
-
-          <div class="branch science"
-               onclick="selectBranch('science')">
-
-            <div class="branch-icon">
-              🧪
-            </div>
-
-            <h3>
-              علوم تجريبية
-            </h3>
-
-            <p>
-              مواد العلوم والرياضيات والفيزياء
-            </p>
-
-          </div>
-
-          <div class="branch literature"
-               onclick="selectBranch('literature')">
-
-            <div class="branch-icon">
-              📚
-            </div>
-
-            <h3>
-              آداب وفلسفة
-            </h3>
-
-            <p>
-              اللغات والفلسفة والتاريخ والجغرافيا
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="empty">
-          🚀 شعب أخرى قادمة إن شاء الله
-        </div>
-
-      </section>
-
-      <!-- =========================
-           SUBJECTS PAGE
-      ========================= -->
-
-      <section id="subjectsPage" class="page">
-
-        <div class="page-title">
-          المواد
-        </div>
-
-        <div id="subjectsSubtitle"
-             class="page-subtitle">
-          اختر مادة للمراجعة.
-        </div>
-
-        <div id="subjectsGrid"
-             class="subjects"
-             style="display:grid;grid-template-columns:1fr 1fr;">
-        </div>
-
-      </section>
-
-      <!-- =========================
-           LESSONS PAGE
-      ========================= -->
-
-      <section id="lessonsPage" class="page">
-
-        <div class="page-title">
-          الدروس
-        </div>
-
-        <div class="page-subtitle">
-          اختر درسًا وابدأ المراجعة.
-        </div>
-
-        <div id="lessonPageList"
-             class="lesson-list">
-        </div>
-
-      </section>
-
-      <!-- =========================
-           LESSON VIEW
-      ========================= -->
-
-      <section id="lessonView" class="page">
-
-        <button class="back-btn"
-                onclick="openLessons()">
-          → رجوع
-        </button>
-
-        <div class="page-title"
-             id="lessonTitle">
-        </div>
-
-        <div class="page-subtitle">
-          مراجعة الدرس
-        </div>
-
-        <article class="article">
-
-          <h2 id="articleHeading">
-          </h2>
-
-          <p>
-            هذا مكان محتوى الدرس الحقيقي.
-            لاحقًا نضع هنا شرحًا منظمًا ومراجعًا
-            حسب برنامج البكالوريا الجزائري.
-          </p>
-
-          <h3>
-            الفكرة الأساسية
-          </h3>
-
-          <p>
-            شرح مبسط ومختصر يساعد التلميذ على
-            فهم الدرس قبل الانتقال إلى التمارين.
-          </p>
-
-          <div class="formula">
-            aₙ = a₁ + (n − 1)r
-          </div>
-
-          <h3>
-            تذكّر ⭐
-          </h3>
-
-          <p>
-            حاول فهم الفكرة أولًا، وبعدها طبّق
-            عليها مجموعة من التمارين.
-          </p>
-
-          <button class="hero-btn"
-                  onclick="startQuiz()">
-            اختبر نفسك 🧠
-          </button>
-
-        </article>
-
-      </section>
-
-      <!-- =========================
-           QUIZ
-      ========================= -->
-
-      <section id="quizPage" class="page">
-
-        <div class="page-title">
-          اختبار سريع 🧠
-        </div>
-
-        <div class="page-subtitle">
-          شوف واش فهمت من الدرس.
-        </div>
-
-        <div class="quiz-card">
-
-          <div class="quiz-progress">
-            <span id="quizProgress"></span>
-          </div>
-
-          <div id="quizQuestion"
-               class="question">
-          </div>
-
-          <div id="quizAnswers"
-               class="answers">
-          </div>
-
-          <button class="quiz-next"
-                  onclick="nextQuestion()">
-            التالي
-          </button>
-
-        </div>
-
-      </section>
-
-      <!-- =========================
-           PROGRESS
-      ========================= -->
-
-      <section id="progressPage" class="page">
-
-        <div class="page-title">
-          تقدّمك 📊
-        </div>
-
-        <div class="page-subtitle">
-          تابع مستواك في المراجعة.
-        </div>
-
-        <div class="progress-card">
-
-          <div class="progress-head">
-            <strong>الرياضيات</strong>
-            <small>35%</small>
-          </div>
-
-          <div class="progress-bar">
-            <span style="width:35%"></span>
-          </div>
-
-        </div>
-
-        <div class="progress-card">
-
-          <div class="progress-head">
-            <strong>الفيزياء</strong>
-            <small>20%</small>
-          </div>
-
-          <div class="progress-bar">
-            <span style="width:20%"></span>
-          </div>
-
-        </div>
-
-        <div class="progress-card">
-
-          <div class="progress-head">
-            <strong>علوم الطبيعة</strong>
-            <small>15%</small>
-          </div>
-
-          <div class="progress-bar">
-            <span style="width:15%"></span>
-          </div>
-
-        </div>
-
-      </section>
-
+  <div class="section">
+
+    <div class="section-head">
+      <div class="section-title">موادك</div>
+      <div class="more" onclick="openSubjects()">عرض الكل</div>
     </div>
 
-  </main>
+    <div id="homeSubjects" class="subjects"></div>
 
-  <!-- =========================
-       BOTTOM NAV
-  ========================= -->
+  </div>
 
-  <nav class="bottom-nav">
+  <div class="section">
 
-    <button class="nav-item active"
-            data-page="home"
-            onclick="navigate('home')">
+    <div class="section-head">
+      <div class="section-title">أكمل مراجعتك</div>
+      <div class="more" onclick="openLessons()">المزيد</div>
+    </div>
 
-      <span class="nav-icon">⌂</span>
-      الرئيسية
+    <div id="homeLessons" class="lesson-list"></div>
 
+  </div>
+
+</section>
+
+<!-- BRANCHES -->
+
+<section id="branchesPage" class="page">
+
+  <div class="page-title">الشعب</div>
+
+  <div class="page-subtitle">
+    اختار شعبتك باش تشوف المواد والدروس.
+  </div>
+
+  <div class="branches">
+
+    <div class="branch science"
+      onclick="selectBranch('science')">
+
+      <div class="branch-icon">🧪</div>
+
+      <h3>علوم تجريبية</h3>
+
+      <p>الرياضيات والفيزياء وعلوم الطبيعة</p>
+    </div>
+
+    <div class="branch literature"
+      onclick="selectBranch('literature')">
+
+      <div class="branch-icon">📚</div>
+
+      <h3>آداب وفلسفة</h3>
+
+      <p>العربية والفلسفة والتاريخ والجغرافيا</p>
+    </div>
+
+  </div>
+
+  <div class="empty">
+    🚀 شعب أخرى نضيفوها لاحقًا.
+  </div>
+
+</section>
+
+<!-- SUBJECTS -->
+
+<section id="subjectsPage" class="page">
+
+  <div class="page-title">المواد</div>
+
+  <div id="subjectsSubtitle" class="page-subtitle"></div>
+
+  <div id="subjectsGrid" class="grid"></div>
+
+</section>
+
+<!-- LESSONS -->
+
+<section id="lessonsPage" class="page">
+
+  <div class="page-title">الدروس</div>
+
+  <div class="page-subtitle">
+    اختر درسًا وابدأ المراجعة.
+  </div>
+
+  <div id="lessonPageList" class="lesson-list"></div>
+
+</section>
+
+<!-- LESSON VIEW -->
+
+<section id="lessonView" class="page">
+
+  <button class="back" onclick="openLessons()">→ رجوع</button>
+
+  <div class="page-title" id="lessonTitle"></div>
+
+  <div class="page-subtitle">
+    مراجعة الدرس
+  </div>
+
+  <article class="article">
+
+    <h2 id="articleHeading"></h2>
+
+    <div class="notice">
+      📚 محتوى تجريبي حاليًا — سيتم استبداله
+      بالدروس المنظمة والمراجعة حسب البرنامج
+      الرسمي للبكالوريا.
+    </div>
+
+    <h3>الفكرة الأساسية</h3>
+
+    <p>
+      هنا سيكون الشرح الكامل للدرس بطريقة
+      مبسطة ومنظمة، مع الأمثلة والنقاط المهمة.
+    </p>
+
+    <div class="formula">
+      aₙ = a₁ + (n − 1)r
+    </div>
+
+    <h3>نصيحة للمراجعة ⭐</h3>
+
+    <p>
+      افهم القاعدة أولًا، ثم شاهد مثالًا محلولًا،
+      وبعدها جرّب حل تمرين بنفسك.
+    </p>
+
+    <button class="primary" onclick="startQuiz()">
+      اختبر نفسك 🧠
     </button>
 
-    <button class="nav-item"
-            data-page="branchesPage"
-            onclick="navigate('branchesPage')">
+  </article>
 
-      <span class="nav-icon">📚</span>
-      الشعب
+</section>
 
+<!-- QUIZ -->
+
+<section id="quizPage" class="page">
+
+  <div class="page-title">اختبار سريع 🧠</div>
+
+  <div class="page-subtitle">
+    اختبر فهمك للدرس.
+  </div>
+
+  <div class="quiz-card">
+
+    <div class="quiz-progress">
+      <span id="quizProgress"></span>
+    </div>
+
+    <div id="quizQuestion" class="question"></div>
+
+    <div id="quizAnswers" class="answers"></div>
+
+    <button class="quiz-next" onclick="nextQuestion()">
+      التالي
     </button>
 
-    <button class="nav-item"
-            data-page="lessonsPage"
-            onclick="openLessons()">
+  </div>
 
-      <span class="nav-icon">📝</span>
-      الدروس
+</section>
 
-    </button>
+<!-- PROGRESS -->
 
-    <button class="nav-item"
-            data-page="progressPage"
-            onclick="navigate('progressPage')">
+<section id="progressPage" class="page">
 
-      <span class="nav-icon">📊</span>
-      تقدمي
+  <div class="page-title">تقدّمك 📊</div>
 
-    </button>
+  <div class="page-subtitle">
+    تابع تقدمك في المراجعة.
+  </div>
 
-  </nav>
+  <div id="progressContent"></div>
 
-  <!-- TOAST -->
+</section>
 
-  <div id="toast"></div>
+</div>
+</main>
 
-  <script>
+<nav class="bottom-nav">
 
-    /* =========================
-       DATA
-    ========================= */
+  <button class="nav-item active"
+    data-page="home"
+    onclick="navigate('home')">
+    <span class="nav-icon">⌂</span>
+    الرئيسية
+  </button>
 
-    const data = {
+  <button class="nav-item"
+    data-page="branchesPage"
+    onclick="openBranches()">
+    <span class="nav-icon">📚</span>
+    الشعب
+  </button>
 
-      science: {
+  <button class="nav-item"
+    data-page="lessonsPage"
+    onclick="openLessons()">
+    <span class="nav-icon">📝</span>
+    الدروس
+  </button>
 
-        name: "علوم تجريبية",
+  <button class="nav-item"
+    data-page="progressPage"
+    onclick="navigate('progressPage')">
+    <span class="nav-icon">📊</span>
+    تقدمي
+  </button>
 
-        subjects: [
+</nav>
 
-          {
-            name: "الرياضيات",
-            icon: "📐"
-          },
+<div id="toast"></div>
 
-          {
-            name: "الفيزياء",
-            icon: "⚛️"
-          },
+<script>
 
-          {
-            name: "علوم الطبيعة والحياة",
-            icon: "🧬"
-          },
+const data = {
 
-          {
-            name: "اللغة العربية",
-            icon: "📖"
-          },
+  science:{
+    name:"علوم تجريبية",
 
-          {
-            name: "اللغة الفرنسية",
-            icon: "🇫🇷"
-          }
+    subjects:[
+      ["الرياضيات","📐"],
+      ["الفيزياء","⚛️"],
+      ["علوم الطبيعة والحياة","🧬"],
+      ["اللغة العربية","📖"],
+      ["اللغة الفرنسية","🇫🇷"],
+      ["اللغة الإنجليزية","🇬🇧"]
+    ]
+  },
 
-        ]
+  literature:{
+    name:"آداب وفلسفة",
 
-      },
+    subjects:[
+      ["اللغة العربية","📖"],
+      ["الفلسفة","💡"],
+      ["التاريخ والجغرافيا","🌍"],
+      ["اللغة الفرنسية","🇫🇷"],
+      ["اللغة الإنجليزية","🇬🇧"]
+    ]
+  }
 
-      literature: {
+};
 
-        name: "آداب وفلسفة",
+const lessons = [
+  "المتتاليات العددية",
+  "الدوال",
+  "الاشتقاق",
+  "التكامل",
+  "الاحتمالات",
+  "الحركة",
+  "الطاقة",
+  "المناعة"
+];
 
-        subjects: [
+let currentBranch = "science";
+let currentLesson = "";
+let quizIndex = 0;
+let selectedAnswer = null;
 
-          {
-            name: "اللغة العربية",
-            icon: "📖"
-          },
+const quiz = [
 
-          {
-            name: "الفلسفة",
-            icon: "💡"
-          },
+  {
+    q:"إذا كان المتتالي حسابيًا، فما الذي يبقى ثابتًا؟",
+    a:[
+      "الفرق بين حدين متتاليين",
+      "حاصل ضرب الحدود",
+      "مجموع الحدود",
+      "كل الحدود متساوية"
+    ],
+    c:0
+  },
 
-          {
-            name: "التاريخ والجغرافيا",
-            icon: "🌍"
-          },
+  {
+    q:"ما الرمز المستعمل غالبًا لأساس المتتالية الحسابية؟",
+    a:["r","x","y","f"],
+    c:0
+  },
 
-          {
-            name: "اللغة الفرنسية",
-            icon: "🇫🇷"
-          },
+  {
+    q:"ما أول خطوة قبل حل التمرين؟",
+    a:[
+      "فهم المعطيات والمطلوب",
+      "التخمين",
+      "ترك السؤال",
+      "الحساب عشوائيًا"
+    ],
+    c:0
+  }
 
-          {
-            name: "اللغة الإنجليزية",
-            icon: "🇬🇧"
-          }
+];
 
-        ]
+function navigate(id){
 
-      }
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  const page=document.getElementById(id);
+
+  if(page){
+    page.classList.add("active");
+  }
+
+  document.querySelectorAll(".nav-item")
+    .forEach(b=>b.classList.remove("active"));
+
+  const nav=document.querySelector(
+    `.nav-item[data-page="${id}"]`
+  );
+
+  if(nav){
+    nav.classList.add("active");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+function openBranches(){
+  navigate("branchesPage");
+}
+
+function selectBranch(branch){
+
+  currentBranch=branch;
+
+  renderSubjects();
+  renderLessons();
+  renderProgress();
+
+  navigate("subjectsPage");
+
+  showToast(
+    "تم اختيار "+data[branch].name+" 🎓"
+  );
+}
+
+function openSubjects(){
+
+  renderSubjects();
+  navigate("subjectsPage");
+
+}
+
+function openLessons(){
+
+  renderLessons();
+  navigate("lessonsPage");
+
+}
+
+function renderSubjects(){
+
+  const branch=data[currentBranch];
+
+  document.getElementById(
+    "subjectsSubtitle"
+  ).textContent=
+    "مواد شعبة "+branch.name;
+
+  const grid=document.getElementById(
+    "subjectsGrid"
+  );
+
+  grid.innerHTML="";
+
+  branch.subjects.forEach(subject=>{
+
+    const div=document.createElement("div");
+
+    div.className="subject";
+
+    div.innerHTML=`
+      <div class="subject-icon">${subject[1]}</div>
+      <strong>${subject[0]}</strong>
+      <small>فتح الدروس ←</small>
+    `;
+
+    div.onclick=()=>{
+      showToast("جاري فتح "+subject[0]+" 📚");
+      setTimeout(openLessons,250);
+    };
+
+    grid.appendChild(div);
+
+  });
+
+  const home=document.getElementById(
+    "homeSubjects"
+  );
+
+  home.innerHTML="";
+
+  branch.subjects.slice(0,5).forEach(subject=>{
+
+    const div=document.createElement("div");
+
+    div.className="subject";
+
+    div.innerHTML=`
+      <div class="subject-icon">${subject[1]}</div>
+      <strong>${subject[0]}</strong>
+      <small>مراجعة</small>
+    `;
+
+    div.onclick=openLessons;
+
+    home.appendChild(div);
+
+  });
+
+}
+
+function renderLessons(){
+
+  const list=document.getElementById(
+    "lessonPageList"
+  );
+
+  list.innerHTML="";
+
+  lessons.forEach((lesson,index)=>{
+
+    const div=document.createElement("div");
+
+    div.className="lesson";
+
+    div.innerHTML=`
+      <div class="lesson-num">
+        ${String(index+1).padStart(2,"0")}
+      </div>
+
+      <div class="lesson-info">
+        <strong>${lesson}</strong>
+        <small>${data[currentBranch].name} • درس</small>
+      </div>
+
+      <div class="arrow">‹</div>
+    `;
+
+    div.onclick=()=>openLesson(lesson);
+
+    list.appendChild(div);
+
+  });
+
+  const home=document.getElementById(
+    "homeLessons"
+  );
+
+  home.innerHTML="";
+
+  lessons.slice(0,3).forEach((lesson,index)=>{
+
+    const div=document.createElement("div");
+
+    div.className="lesson";
+
+    div.innerHTML=`
+      <div class="lesson-num">
+        ${String(index+1).padStart(2,"0")}
+      </div>
+
+      <div class="lesson-info">
+        <strong>${lesson}</strong>
+        <small>${data[currentBranch].name}</small>
+      </div>
+
+      <div class="arrow">‹</div>
+    `;
+
+    div.onclick=()=>openLesson(lesson);
+
+    home.appendChild(div);
+
+  });
+
+}
+
+function openLesson(title){
+
+  currentLesson=title;
+
+  document.getElementById(
+    "lessonTitle"
+  ).textContent=title;
+
+  document.getElementById(
+    "articleHeading"
+  ).textContent=title;
+
+  navigate("lessonView");
+
+}
+
+function startQuiz(){
+
+  quizIndex=0;
+  selectedAnswer=null;
+
+  renderQuestion();
+
+  navigate("quizPage");
+
+}
+
+function renderQuestion(){
+
+  const item=quiz[quizIndex];
+
+  selectedAnswer=null;
+
+  document.getElementById(
+    "quizQuestion"
+  ).textContent=item.q;
+
+  const answers=document.getElementById(
+    "quizAnswers"
+  );
+
+  answers.innerHTML="";
+
+  item.a.forEach((answer,index)=>{
+
+    const button=document.createElement("button");
+
+    button.className="answer";
+
+    button.textContent=answer;
+
+    button.onclick=()=>{
+
+      document.querySelectorAll(".answer")
+        .forEach(x=>x.classList.remove("selected"));
+
+      button.classList.add("selected");
+
+      selectedAnswer=index;
 
     };
 
-    let currentBranch = "science";
+    answers.appendChild(button);
 
-    /* =========================
-       NAVIGATION
-    ========================= */
+  });
 
-    function navigate(pageId) {
+  document.getElementById(
+    "quizProgress"
+  ).style.width=
+    ((quizIndex+1)/quiz.length*100)+"%";
 
-      document.querySelectorAll(".page")
-        .forEach(page => {
-          page.classList.remove("active");
-        });
+}
 
-      const page = document.getElementById(pageId);
+function nextQuestion(){
 
-      if (page) {
-        page.classList.add("active");
-      }
+  if(selectedAnswer===null){
 
-      document.querySelectorAll(".nav-item")
-        .forEach(button => {
-          button.classList.remove("active");
-        });
+    showToast("اختار إجابة أولًا 👇");
 
-      const navButton =
-        document.querySelector(
-          `.nav-item[data-page="${pageId}"]`
-        );
+    return;
 
-      if (navButton) {
-        navButton.classList.add("active");
-      }
+  }
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
+  const item=quiz[quizIndex];
 
-    function openBranchPage() {
-      navigate("branchesPage");
-    }
+  const buttons=document.querySelectorAll(".answer");
 
-    function openSubjects() {
+  if(selectedAnswer===item.c){
 
-      renderSubjects();
+    buttons[selectedAnswer]
+      .classList.add("correct");
 
-      navigate("subjectsPage");
-    }
+    showToast("إجابة صحيحة 🎉");
 
-    function openLessons() {
+  }else{
 
-      renderLessons();
+    buttons[selectedAnswer]
+      .classList.add("wrong");
 
-      navigate("lessonsPage");
-    }
+    buttons[item.c]
+      .classList.add("correct");
 
-    /* =========================
-       BRANCH
-    ========================= */
+    showToast("شوف الإجابة الصحيحة بالأخضر 👌");
 
-    function selectBranch(branch) {
+  }
 
-      currentBranch = branch;
+  setTimeout(()=>{
 
-      renderSubjects();
+    quizIndex++;
 
-      renderLessons();
+    if(quizIndex>=quiz.length){
 
-      navigate("subjectsPage");
+      showToast("كملت الاختبار! 🔥");
 
-      showToast(
-        `تم اختيار ${data[branch].name} 🎓`
-      );
-    }
+      navigate("progressPage");
 
-    /* =========================
-       SUBJECTS
-    ========================= */
-
-    function renderSubjects() {
-
-      const branch = data[currentBranch];
-
-      const container =
-        document.getElementById("subjectsGrid");
-
-      const subtitle =
-        document.getElementById("subjectsSubtitle");
-
-      if (!container) return;
-
-      subtitle.textContent =
-        `مواد شعبة ${branch.name}`;
-
-      container.innerHTML = "";
-
-      branch.subjects.forEach(subject => {
-
-        const item =
-          document.createElement("div");
-
-        item.className = "subject";
-
-        item.style.minWidth = "0";
-
-        item.innerHTML = `
-          <div class="subject-icon">
-            ${subject.icon}
-          </div>
-
-          <strong>
-            ${subject.name}
-          </strong>
-
-          <small>
-            الدروس ←
-          </small>
-        `;
-
-        item.onclick = () => {
-
-          showToast(
-            `جاري فتح ${subject.name} 📚`
-          );
-
-          setTimeout(() => {
-            openLessons();
-          }, 350);
-
-        };
-
-        container.appendChild(item);
-
-      });
-
-      renderHomeSubjects();
+      return;
 
     }
 
-    function renderHomeSubjects() {
+    renderQuestion();
 
-      const container =
-        document.getElementById("homeSubjects");
+  },850);
 
-      if (!container) return;
+}
 
-      container.innerHTML = "";
+function renderProgress(){
 
-      data[currentBranch]
-        .subjects
-        .slice(0, 4)
-        .forEach(subject => {
+  const content=document.getElementById(
+    "progressContent"
+  );
 
-          const item =
-            document.createElement("div");
+  const subjects=data[currentBranch].subjects;
 
-          item.className = "subject";
+  content.innerHTML="";
 
-          item.innerHTML = `
-            <div class="subject-icon">
-              ${subject.icon}
-            </div>
+  subjects.slice(0,4).forEach((subject,index)=>{
 
-            <strong>
-              ${subject.name}
-            </strong>
+    const values=[35,20,15,10];
 
-            <small>
-              مراجعة
-            </small>
-          `;
+    const card=document.createElement("div");
 
-          item.onclick = () => {
-            openLessons();
-          };
+    card.className="progress-card";
 
-          container.appendChild(item);
+    card.innerHTML=`
+      <div class="progress-head">
+        <strong>${subject[0]}</strong>
+        <small>${values[index]}%</small>
+      </div>
 
-        });
+      <div class="progress-bar">
+        <span style="width:${values[index]}%"></span>
+      </div>
+    `;
 
-    }
+    content.appendChild(card);
 
-    /* =========================
-       LESSONS
-    ========================= */
+  });
 
-    function renderLessons() {
+}
 
-      const container =
-        document.getElementById("lessonPageList");
+let toastTimer;
 
-      if (!container) return;
+function showToast(message){
 
-      container.innerHTML = "";
+  const toast=document.getElementById("toast");
 
-      const lessons = [
+  toast.textContent=message;
 
-        "المتتاليات العددية",
-        "الدوال",
-        "الاشتقاق",
-        "التكامل",
-        "الاحتمالات",
-        "الحركة",
-        "الطاقة",
-        "المناعة"
+  toast.classList.add("show");
 
-      ];
+  clearTimeout(toastTimer);
 
-      lessons.forEach((lesson, index) => {
+  toastTimer=setTimeout(()=>{
+    toast.classList.remove("show");
+  },2200);
 
-        const item =
-          document.createElement("div");
+}
 
-        item.className = "lesson";
+window.addEventListener("load",()=>{
 
-        item.innerHTML = `
+  renderSubjects();
+  renderLessons();
+  renderProgress();
 
-          <div class="lesson-num">
-            ${String(index + 1).padStart(2, "0")}
-          </div>
+  setTimeout(()=>{
 
-          <div class="lesson-info">
+    document
+      .getElementById("splash")
+      .classList.add("hide");
 
-            <strong>
-              ${lesson}
-            </strong>
+  },1500);
 
-            <small>
-              ${data[currentBranch].name}
-              • درس
-            </small>
+});
 
-          </div>
-
-          <div class="arrow">
-            ‹
-          </div>
-
-        `;
-
-        item.onclick = () => {
-          openLesson(lesson);
-        };
-
-        container.appendChild(item);
-
-      });
-
-    }
-
-    /* =========================
-       LESSON VIEW
-    ========================= */
-
-    function openLesson(title) {
-
-      document.getElementById(
-        "lessonTitle"
-      ).textContent = title;
-
-      document.getElementById(
-        "articleHeading"
-      ).textContent = title;
-
-      navigate("lessonView");
-
-    }
-
-    /* =========================
-       QUIZ
-    ========================= */
-
-    const quiz = [
-
-      {
-        question:
-          "إذا كان المتتالي حسابيًا، فما الذي يبقى ثابتًا؟",
-
-        answers: [
-          "الفرق بين حدين متتاليين",
-          "حاصل ضرب الحدود",
-          "مجموع الحدود",
-          "كل الحدود متساوية"
-        ],
-
-        correct: 0
-
-      },
-
-      {
-        question:
-          "ما الرمز المستعمل غالبًا لأساس المتتالية الحسابية؟",
-
-        answers: [
-          "r",
-          "x",
-          "y",
-          "f"
-        ],
-
-        correct: 0
-
-      },
-
-      {
-        question:
-          "ماذا يجب أن تفعل قبل حل التمرين؟",
-
-        answers: [
-          "تفهم المعطيات والمطلوب",
-          "تخمن الإجابة",
-          "تترك السؤال",
-          "تحسب عشوائيًا"
-        ],
-
-        correct: 0
-
-      }
-
-    ];
-
-    let quizIndex = 0;
-    let selectedAnswer = null;
-
-    function startQuiz() {
-
-      quizIndex = 0;
-      selectedAnswer = null;
-
-      renderQuestion();
-
-      navigate("quizPage");
-
-    }
-
-    function renderQuestion() {
-
-      const question =
-        quiz[quizIndex];
-
-      selectedAnswer = null;
-
-      document.getElementById(
-        "quizQuestion"
-      ).textContent =
-        question.question;
-
-      const answers =
-        document.getElementById(
-          "quizAnswers"
-        );
-
-      answers.innerHTML = "";
-
-      question.answers.forEach(
-        (answer, index) => {
-
-          const button =
-            document.createElement("button");
-
-          button.className = "answer";
-
-          button.textContent = answer;
-
-          button.onclick = () => {
-
-            document
-              .querySelectorAll(".answer")
-              .forEach(btn => {
-                btn.classList.remove(
-                  "selected"
-                );
-              });
-
-            button.classList.add(
-              "selected"
-            );
-
-            selectedAnswer = index;
-
-          };
-
-          answers.appendChild(button);
-
-        }
-      );
-
-      const progress =
-        ((quizIndex + 1) / quiz.length) * 100;
-
-      document.getElementById(
-        "quizProgress"
-      ).style.width =
-        progress + "%";
-
-    }
-
-    function nextQuestion() {
-
-      if (selectedAnswer === null) {
-
-        showToast(
-          "اختار إجابة أولًا 👇"
-        );
-
-        return;
-      }
-
-      const correct =
-        quiz[quizIndex].correct;
-
-      const buttons =
-        document.querySelectorAll(
-          ".answer"
-        );
-
-      if (selectedAnswer === correct) {
-
-        buttons[selectedAnswer]
-          .classList.add("correct");
-
-        showToast("إجابة صحيحة 🎉");
-
-      } else {
-
-        buttons[selectedAnswer]
-          .classList.add("wrong");
-
-        buttons[correct]
-          .classList.add("correct");
-
-        showToast(
-          "الإجابة الصحيحة موضحة بالأخضر"
-        );
-
-      }
-
-      setTimeout(() => {
-
-        quizIndex++;
-
-        if (quizIndex >= quiz.length) {
-
-          showToast(
-            "كملت الاختبار! 🔥"
-          );
-
-          navigate("progressPage");
-
-          return;
-
-        }
-
-        renderQuestion();
-
-      }, 800);
-
-    }
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    let toastTimer;
-
-    function showToast(message) {
-
-      const toast =
-        document.getElementById("toast");
-
-      toast.textContent = message;
-
-      toast.classList.add("show");
-
-      clearTimeout(toastTimer);
-
-      toastTimer =
-        setTimeout(() => {
-
-          toast.classList.remove("show");
-
-        }, 2200);
-
-    }
-
-    /* =========================
-       SPLASH
-    ========================= */
-
-    window.addEventListener(
-      "load",
-      () => {
-
-        renderSubjects();
-        renderLessons();
-
-        setTimeout(() => {
-
-          document
-            .getElementById("splash")
-            .classList.add("hide");
-
-        }, 1500);
-
-      }
-    );
-
-  </script>
+</script>
 
 </body>
 </html>
