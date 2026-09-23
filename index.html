@@ -1,1 +1,1921 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+  <meta name="theme-color" content="#05050b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <title>BAC DZ 🇩🇿</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #05050b;
+      color: #f7f7ff;
+      font-family: Arial, "Tahoma", sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* =========================
+       SPLASH SCREEN
+    ========================= */
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(112,97,255,.20), transparent 35%),
+        linear-gradient(180deg, #030309, #080714 65%, #030309);
+      transition: opacity .5s ease, visibility .5s ease;
+    }
+
+    #splash.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+      animation: splashIn .8s ease;
+    }
+
+    @keyframes splashIn {
+      from {
+        opacity: 0;
+        transform: scale(.94) translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .splash-logo {
+      width: 145px;
+      height: 145px;
+      margin: 0 auto 24px;
+      border-radius: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background:
+        linear-gradient(145deg, #111120, #07070e);
+      border: 1px solid rgba(145,127,255,.5);
+      box-shadow:
+        0 0 30px rgba(112,97,255,.25),
+        inset 0 0 30px rgba(112,97,255,.06);
+    }
+
+    .splash-logo::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 31px;
+      border: 1px solid rgba(145,127,255,.22);
+    }
+
+    .logo-text {
+      position: relative;
+      line-height: .8;
+      font-weight: 900;
+      letter-spacing: -3px;
+    }
+
+    .logo-bac {
+      display: block;
+      color: #ffffff;
+      font-size: 43px;
+    }
+
+    .logo-dz {
+      display: block;
+      color: #917fff;
+      font-size: 38px;
+      margin-top: 7px;
+    }
+
+    .splash-title {
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .splash-subtitle {
+      color: #aaa9bd;
+      font-size: 15px;
+      margin-bottom: 28px;
+    }
+
+    .loading {
+      width: 150px;
+      height: 4px;
+      margin: auto;
+      border-radius: 10px;
+      background: #202034;
+      overflow: hidden;
+    }
+
+    .loading span {
+      display: block;
+      width: 45%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7061ff, #b49dff);
+      animation: loading 1.2s ease infinite;
+    }
+
+    @keyframes loading {
+      0% {
+        transform: translateX(220%);
+      }
+      100% {
+        transform: translateX(-220%);
+      }
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    #app {
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    .container {
+      width: min(100% - 30px, 720px);
+      margin: auto;
+    }
+
+    .topbar {
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #10101c;
+      border: 1px solid #292642;
+      box-shadow: 0 0 18px rgba(112,97,255,.12);
+    }
+
+    .brand-icon strong {
+      font-size: 15px;
+      line-height: .8;
+    }
+
+    .brand-icon span {
+      color: #917fff;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .brand-name span {
+      color: #917fff;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #222236;
+      border-radius: 13px;
+      background: #0c0c16;
+      color: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .icon-btn:active {
+      transform: scale(.95);
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 27px 23px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(112,97,255,.22), transparent 32%),
+        linear-gradient(145deg, #111020, #090912);
+      border: 1px solid #25243d;
+      box-shadow: 0 20px 50px rgba(0,0,0,.22);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      left: -100px;
+      bottom: -110px;
+      border-radius: 50%;
+      background: rgba(112,97,255,.10);
+      filter: blur(30px);
+    }
+
+    .hero small {
+      color: #9b91d7;
+      font-size: 13px;
+    }
+
+    .hero h1 {
+      margin: 10px 0 9px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .hero h1 span {
+      color: #917fff;
+    }
+
+    .hero p {
+      color: #aaa9b9;
+      line-height: 1.8;
+      margin: 0 0 20px;
+      font-size: 14px;
+    }
+
+    .hero-btn {
+      border: 0;
+      padding: 13px 18px;
+      border-radius: 14px;
+      color: white;
+      background: linear-gradient(135deg, #7061ff, #8e7cff);
+      box-shadow: 0 8px 25px rgba(112,97,255,.22);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .section-more {
+      color: #9188b7;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* =========================
+       BRANCHES
+    ========================= */
+
+    .branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .branch {
+      position: relative;
+      overflow: hidden;
+      min-height: 145px;
+      padding: 18px;
+      border-radius: 21px;
+      border: 1px solid #25243a;
+      background: #0c0c16;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .branch:active {
+      transform: scale(.97);
+    }
+
+    .branch.science {
+      background:
+        radial-gradient(circle at 85% 10%, rgba(112,97,255,.19), transparent 40%),
+        #0c0c16;
+    }
+
+    .branch.literature {
+      background:
+        radial-gradient(circle at 85% 10%, rgba(59,130,246,.14), transparent 40%),
+        #0c0c16;
+    }
+
+    .branch-icon {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: #151526;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
+    .branch h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .branch p {
+      margin: 0;
+      color: #858598;
+      font-size: 12px;
+    }
+
+    /* =========================
+       SUBJECTS
+    ========================= */
+
+    .subjects {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+      scrollbar-width: none;
+    }
+
+    .subjects::-webkit-scrollbar {
+      display: none;
+    }
+
+    .subject {
+      min-width: 145px;
+      padding: 17px;
+      border-radius: 18px;
+      background: #0d0d18;
+      border: 1px solid #222237;
+      cursor: pointer;
+    }
+
+    .subject-icon {
+      font-size: 23px;
+      margin-bottom: 13px;
+    }
+
+    .subject strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .subject small {
+      color: #77778a;
+    }
+
+    /* =========================
+       LESSONS
+    ========================= */
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lesson {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 14px;
+      background: #0d0d18;
+      border: 1px solid #222237;
+      border-radius: 17px;
+      cursor: pointer;
+    }
+
+    .lesson-num {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #16152a;
+      color: #a494ff;
+      font-weight: 900;
+    }
+
+    .lesson-info {
+      flex: 1;
+    }
+
+    .lesson-info strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .lesson-info small {
+      color: #77778b;
+    }
+
+    .arrow {
+      color: #6d6d7d;
+      font-size: 18px;
+    }
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .page {
+      display: none;
+      animation: pageIn .25s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-title {
+      font-size: 27px;
+      font-weight: 900;
+      margin: 20px 0 6px;
+    }
+
+    .page-subtitle {
+      color: #878799;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .back-btn {
+      margin-top: 18px;
+      border: 1px solid #24243a;
+      background: #0d0d18;
+      color: #ddd;
+      border-radius: 12px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    /* =========================
+       LESSON ARTICLE
+    ========================= */
+
+    .article {
+      background: #0d0d18;
+      border: 1px solid #24243a;
+      border-radius: 22px;
+      padding: 20px;
+      line-height: 2;
+    }
+
+    .article h2 {
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    .article h3 {
+      margin-top: 24px;
+      color: #a494ff;
+    }
+
+    .article p {
+      color: #b4b3c2;
+      font-size: 14px;
+    }
+
+    .formula {
+      direction: ltr;
+      text-align: center;
+      padding: 16px;
+      margin: 15px 0;
+      border-radius: 15px;
+      background: #07070f;
+      border: 1px solid #272642;
+      color: #b09fff;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       QUIZ
+    ========================= */
+
+    .quiz-card {
+      background: #0d0d18;
+      border: 1px solid #24243a;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .quiz-progress {
+      height: 5px;
+      background: #202033;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .quiz-progress span {
+      display: block;
+      width: 33%;
+      height: 100%;
+      background: #8170ff;
+    }
+
+    .question {
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .answer {
+      text-align: right;
+      padding: 15px;
+      border-radius: 15px;
+      background: #111121;
+      border: 1px solid #29283e;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    .answer.selected {
+      border-color: #8170ff;
+      background: rgba(112,97,255,.12);
+    }
+
+    .answer.correct {
+      border-color: #20d6a0;
+      background: rgba(32,214,160,.10);
+    }
+
+    .answer.wrong {
+      border-color: #ff5577;
+      background: rgba(255,85,119,.10);
+    }
+
+    .quiz-next {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border: 0;
+      border-radius: 15px;
+      color: #fff;
+      background: #7061ff;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    /* =========================
+       PROGRESS
+    ========================= */
+
+    .progress-card {
+      background: #0d0d18;
+      border: 1px solid #24243a;
+      border-radius: 21px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+
+    .progress-head small {
+      color: #88889a;
+    }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #202032;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7061ff, #a491ff);
+    }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: min(calc(100% - 22px), 650px);
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      border: 1px solid #25243a;
+      border-radius: 22px;
+      background: rgba(10,10,18,.92);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 15px 45px rgba(0,0,0,.35);
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #6f6f82;
+      padding: 9px 4px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .nav-item .nav-icon {
+      display: block;
+      font-size: 19px;
+      margin-bottom: 4px;
+    }
+
+    .nav-item.active {
+      color: #a596ff;
+      background: rgba(112,97,255,.11);
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 100px;
+      transform: translate(-50%, 20px);
+      z-index: 5000;
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: #161624;
+      border: 1px solid #302e4a;
+      color: #eee;
+      font-size: 13px;
+      transition: .3s ease;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    .empty {
+      text-align: center;
+      padding: 45px 20px;
+      color: #77778a;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 380px) {
+      .hero h1 {
+        font-size: 26px;
+      }
+
+      .branches {
+        grid-template-columns: 1fr;
+      }
+
+      .branch {
+        min-height: 125px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       SPLASH
+  ========================= -->
+
+  <div id="splash">
+    <div class="splash-content">
+
+      <div class="splash-logo">
+        <div class="logo-text">
+          <span class="logo-bac">BAC</span>
+          <span class="logo-dz">DZ</span>
+        </div>
+      </div>
+
+      <div class="splash-title">
+        BAC DZ 🇩🇿
+      </div>
+
+      <div class="splash-subtitle">
+        مراجعتك نحو البكالوريا تبدأ هنا
+      </div>
+
+      <div class="loading">
+        <span></span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================
+       APP
+  ========================= -->
+
+  <main id="app">
+
+    <div class="container">
+
+      <!-- TOPBAR -->
+
+      <header class="topbar">
+
+        <div class="brand">
+
+          <div class="brand-icon">
+            <strong>BAC<br><span>DZ</span></strong>
+          </div>
+
+          <div class="brand-name">
+            BAC <span>DZ</span>
+          </div>
+
+        </div>
+
+        <div class="top-actions">
+          <button class="icon-btn" onclick="showToast('الإشعارات قادمة قريبًا 🔔')">
+            🔔
+          </button>
+
+          <button class="icon-btn" onclick="showToast('الإعدادات قادمة قريبًا ⚙️')">
+            ⚙️
+          </button>
+        </div>
+
+      </header>
+
+      <!-- =========================
+           HOME
+      ========================= -->
+
+      <section id="home" class="page active">
+
+        <div class="hero">
+
+          <small>🇩🇿 منصة البكالوريا الجزائرية</small>
+
+          <h1>
+            حضّر للـ <span>BAC</span><br />
+            بطريقة أذكى 🚀
+          </h1>
+
+          <p>
+            دروس، مراجعة، اختبارات وتتبع للتقدم
+            في مكان واحد.
+          </p>
+
+          <button class="hero-btn" onclick="openBranchPage()">
+            ابدأ المراجعة ←
+          </button>
+
+        </div>
+
+        <!-- BRANCHES -->
+
+        <div class="section">
+
+          <div class="section-head">
+            <div class="section-title">
+              اختر شعبتك
+            </div>
+
+            <div class="section-more"
+                 onclick="openBranchPage()">
+              الكل
+            </div>
+          </div>
+
+          <div class="branches">
+
+            <div class="branch science"
+                 onclick="selectBranch('science')">
+
+              <div class="branch-icon">
+                🧪
+              </div>
+
+              <h3>
+                علوم تجريبية
+              </h3>
+
+              <p>
+                الرياضيات • الفيزياء • العلوم
+              </p>
+
+            </div>
+
+            <div class="branch literature"
+                 onclick="selectBranch('literature')">
+
+              <div class="branch-icon">
+                📚
+              </div>
+
+              <h3>
+                آداب وفلسفة
+              </h3>
+
+              <p>
+                العربية • الفلسفة • التاريخ
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- SUBJECTS -->
+
+        <div class="section">
+
+          <div class="section-head">
+            <div class="section-title">
+              موادك
+            </div>
+
+            <div class="section-more"
+                 onclick="openSubjects()">
+              عرض الكل
+            </div>
+          </div>
+
+          <div id="homeSubjects" class="subjects"></div>
+
+        </div>
+
+        <!-- LESSONS -->
+
+        <div class="section">
+
+          <div class="section-head">
+
+            <div class="section-title">
+              أكمل مراجعتك
+            </div>
+
+            <div class="section-more"
+                 onclick="openLessons()">
+              المزيد
+            </div>
+
+          </div>
+
+          <div class="lesson-list">
+
+            <div class="lesson"
+                 onclick="openLesson('المتتاليات العددية')">
+
+              <div class="lesson-num">
+                01
+              </div>
+
+              <div class="lesson-info">
+                <strong>
+                  المتتاليات العددية
+                </strong>
+
+                <small>
+                  الرياضيات • 15 دقيقة
+                </small>
+              </div>
+
+              <div class="arrow">
+                ‹
+              </div>
+
+            </div>
+
+            <div class="lesson"
+                 onclick="openLesson('الحركة')">
+
+              <div class="lesson-num">
+                02
+              </div>
+
+              <div class="lesson-info">
+                <strong>
+                  الحركة
+                </strong>
+
+                <small>
+                  الفيزياء • 20 دقيقة
+                </small>
+              </div>
+
+              <div class="arrow">
+                ‹
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- =========================
+           BRANCH PAGE
+      ========================= -->
+
+      <section id="branchesPage" class="page">
+
+        <div class="page-title">
+          الشعب
+        </div>
+
+        <div class="page-subtitle">
+          اختر الشعبة باش تشوف المواد والدروس.
+        </div>
+
+        <div class="branches">
+
+          <div class="branch science"
+               onclick="selectBranch('science')">
+
+            <div class="branch-icon">
+              🧪
+            </div>
+
+            <h3>
+              علوم تجريبية
+            </h3>
+
+            <p>
+              مواد العلوم والرياضيات والفيزياء
+            </p>
+
+          </div>
+
+          <div class="branch literature"
+               onclick="selectBranch('literature')">
+
+            <div class="branch-icon">
+              📚
+            </div>
+
+            <h3>
+              آداب وفلسفة
+            </h3>
+
+            <p>
+              اللغات والفلسفة والتاريخ والجغرافيا
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="empty">
+          🚀 شعب أخرى قادمة إن شاء الله
+        </div>
+
+      </section>
+
+      <!-- =========================
+           SUBJECTS PAGE
+      ========================= -->
+
+      <section id="subjectsPage" class="page">
+
+        <div class="page-title">
+          المواد
+        </div>
+
+        <div id="subjectsSubtitle"
+             class="page-subtitle">
+          اختر مادة للمراجعة.
+        </div>
+
+        <div id="subjectsGrid"
+             class="subjects"
+             style="display:grid;grid-template-columns:1fr 1fr;">
+        </div>
+
+      </section>
+
+      <!-- =========================
+           LESSONS PAGE
+      ========================= -->
+
+      <section id="lessonsPage" class="page">
+
+        <div class="page-title">
+          الدروس
+        </div>
+
+        <div class="page-subtitle">
+          اختر درسًا وابدأ المراجعة.
+        </div>
+
+        <div id="lessonPageList"
+             class="lesson-list">
+        </div>
+
+      </section>
+
+      <!-- =========================
+           LESSON VIEW
+      ========================= -->
+
+      <section id="lessonView" class="page">
+
+        <button class="back-btn"
+                onclick="openLessons()">
+          → رجوع
+        </button>
+
+        <div class="page-title"
+             id="lessonTitle">
+        </div>
+
+        <div class="page-subtitle">
+          مراجعة الدرس
+        </div>
+
+        <article class="article">
+
+          <h2 id="articleHeading">
+          </h2>
+
+          <p>
+            هذا مكان محتوى الدرس الحقيقي.
+            لاحقًا نضع هنا شرحًا منظمًا ومراجعًا
+            حسب برنامج البكالوريا الجزائري.
+          </p>
+
+          <h3>
+            الفكرة الأساسية
+          </h3>
+
+          <p>
+            شرح مبسط ومختصر يساعد التلميذ على
+            فهم الدرس قبل الانتقال إلى التمارين.
+          </p>
+
+          <div class="formula">
+            aₙ = a₁ + (n − 1)r
+          </div>
+
+          <h3>
+            تذكّر ⭐
+          </h3>
+
+          <p>
+            حاول فهم الفكرة أولًا، وبعدها طبّق
+            عليها مجموعة من التمارين.
+          </p>
+
+          <button class="hero-btn"
+                  onclick="startQuiz()">
+            اختبر نفسك 🧠
+          </button>
+
+        </article>
+
+      </section>
+
+      <!-- =========================
+           QUIZ
+      ========================= -->
+
+      <section id="quizPage" class="page">
+
+        <div class="page-title">
+          اختبار سريع 🧠
+        </div>
+
+        <div class="page-subtitle">
+          شوف واش فهمت من الدرس.
+        </div>
+
+        <div class="quiz-card">
+
+          <div class="quiz-progress">
+            <span id="quizProgress"></span>
+          </div>
+
+          <div id="quizQuestion"
+               class="question">
+          </div>
+
+          <div id="quizAnswers"
+               class="answers">
+          </div>
+
+          <button class="quiz-next"
+                  onclick="nextQuestion()">
+            التالي
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- =========================
+           PROGRESS
+      ========================= -->
+
+      <section id="progressPage" class="page">
+
+        <div class="page-title">
+          تقدّمك 📊
+        </div>
+
+        <div class="page-subtitle">
+          تابع مستواك في المراجعة.
+        </div>
+
+        <div class="progress-card">
+
+          <div class="progress-head">
+            <strong>الرياضيات</strong>
+            <small>35%</small>
+          </div>
+
+          <div class="progress-bar">
+            <span style="width:35%"></span>
+          </div>
+
+        </div>
+
+        <div class="progress-card">
+
+          <div class="progress-head">
+            <strong>الفيزياء</strong>
+            <small>20%</small>
+          </div>
+
+          <div class="progress-bar">
+            <span style="width:20%"></span>
+          </div>
+
+        </div>
+
+        <div class="progress-card">
+
+          <div class="progress-head">
+            <strong>علوم الطبيعة</strong>
+            <small>15%</small>
+          </div>
+
+          <div class="progress-bar">
+            <span style="width:15%"></span>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =========================
+       BOTTOM NAV
+  ========================= -->
+
+  <nav class="bottom-nav">
+
+    <button class="nav-item active"
+            data-page="home"
+            onclick="navigate('home')">
+
+      <span class="nav-icon">⌂</span>
+      الرئيسية
+
+    </button>
+
+    <button class="nav-item"
+            data-page="branchesPage"
+            onclick="navigate('branchesPage')">
+
+      <span class="nav-icon">📚</span>
+      الشعب
+
+    </button>
+
+    <button class="nav-item"
+            data-page="lessonsPage"
+            onclick="openLessons()">
+
+      <span class="nav-icon">📝</span>
+      الدروس
+
+    </button>
+
+    <button class="nav-item"
+            data-page="progressPage"
+            onclick="navigate('progressPage')">
+
+      <span class="nav-icon">📊</span>
+      تقدمي
+
+    </button>
+
+  </nav>
+
+  <!-- TOAST -->
+
+  <div id="toast"></div>
+
+  <script>
+
+    /* =========================
+       DATA
+    ========================= */
+
+    const data = {
+
+      science: {
+
+        name: "علوم تجريبية",
+
+        subjects: [
+
+          {
+            name: "الرياضيات",
+            icon: "📐"
+          },
+
+          {
+            name: "الفيزياء",
+            icon: "⚛️"
+          },
+
+          {
+            name: "علوم الطبيعة والحياة",
+            icon: "🧬"
+          },
+
+          {
+            name: "اللغة العربية",
+            icon: "📖"
+          },
+
+          {
+            name: "اللغة الفرنسية",
+            icon: "🇫🇷"
+          }
+
+        ]
+
+      },
+
+      literature: {
+
+        name: "آداب وفلسفة",
+
+        subjects: [
+
+          {
+            name: "اللغة العربية",
+            icon: "📖"
+          },
+
+          {
+            name: "الفلسفة",
+            icon: "💡"
+          },
+
+          {
+            name: "التاريخ والجغرافيا",
+            icon: "🌍"
+          },
+
+          {
+            name: "اللغة الفرنسية",
+            icon: "🇫🇷"
+          },
+
+          {
+            name: "اللغة الإنجليزية",
+            icon: "🇬🇧"
+          }
+
+        ]
+
+      }
+
+    };
+
+    let currentBranch = "science";
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    function navigate(pageId) {
+
+      document.querySelectorAll(".page")
+        .forEach(page => {
+          page.classList.remove("active");
+        });
+
+      const page = document.getElementById(pageId);
+
+      if (page) {
+        page.classList.add("active");
+      }
+
+      document.querySelectorAll(".nav-item")
+        .forEach(button => {
+          button.classList.remove("active");
+        });
+
+      const navButton =
+        document.querySelector(
+          `.nav-item[data-page="${pageId}"]`
+        );
+
+      if (navButton) {
+        navButton.classList.add("active");
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function openBranchPage() {
+      navigate("branchesPage");
+    }
+
+    function openSubjects() {
+
+      renderSubjects();
+
+      navigate("subjectsPage");
+    }
+
+    function openLessons() {
+
+      renderLessons();
+
+      navigate("lessonsPage");
+    }
+
+    /* =========================
+       BRANCH
+    ========================= */
+
+    function selectBranch(branch) {
+
+      currentBranch = branch;
+
+      renderSubjects();
+
+      renderLessons();
+
+      navigate("subjectsPage");
+
+      showToast(
+        `تم اختيار ${data[branch].name} 🎓`
+      );
+    }
+
+    /* =========================
+       SUBJECTS
+    ========================= */
+
+    function renderSubjects() {
+
+      const branch = data[currentBranch];
+
+      const container =
+        document.getElementById("subjectsGrid");
+
+      const subtitle =
+        document.getElementById("subjectsSubtitle");
+
+      if (!container) return;
+
+      subtitle.textContent =
+        `مواد شعبة ${branch.name}`;
+
+      container.innerHTML = "";
+
+      branch.subjects.forEach(subject => {
+
+        const item =
+          document.createElement("div");
+
+        item.className = "subject";
+
+        item.style.minWidth = "0";
+
+        item.innerHTML = `
+          <div class="subject-icon">
+            ${subject.icon}
+          </div>
+
+          <strong>
+            ${subject.name}
+          </strong>
+
+          <small>
+            الدروس ←
+          </small>
+        `;
+
+        item.onclick = () => {
+
+          showToast(
+            `جاري فتح ${subject.name} 📚`
+          );
+
+          setTimeout(() => {
+            openLessons();
+          }, 350);
+
+        };
+
+        container.appendChild(item);
+
+      });
+
+      renderHomeSubjects();
+
+    }
+
+    function renderHomeSubjects() {
+
+      const container =
+        document.getElementById("homeSubjects");
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      data[currentBranch]
+        .subjects
+        .slice(0, 4)
+        .forEach(subject => {
+
+          const item =
+            document.createElement("div");
+
+          item.className = "subject";
+
+          item.innerHTML = `
+            <div class="subject-icon">
+              ${subject.icon}
+            </div>
+
+            <strong>
+              ${subject.name}
+            </strong>
+
+            <small>
+              مراجعة
+            </small>
+          `;
+
+          item.onclick = () => {
+            openLessons();
+          };
+
+          container.appendChild(item);
+
+        });
+
+    }
+
+    /* =========================
+       LESSONS
+    ========================= */
+
+    function renderLessons() {
+
+      const container =
+        document.getElementById("lessonPageList");
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const lessons = [
+
+        "المتتاليات العددية",
+        "الدوال",
+        "الاشتقاق",
+        "التكامل",
+        "الاحتمالات",
+        "الحركة",
+        "الطاقة",
+        "المناعة"
+
+      ];
+
+      lessons.forEach((lesson, index) => {
+
+        const item =
+          document.createElement("div");
+
+        item.className = "lesson";
+
+        item.innerHTML = `
+
+          <div class="lesson-num">
+            ${String(index + 1).padStart(2, "0")}
+          </div>
+
+          <div class="lesson-info">
+
+            <strong>
+              ${lesson}
+            </strong>
+
+            <small>
+              ${data[currentBranch].name}
+              • درس
+            </small>
+
+          </div>
+
+          <div class="arrow">
+            ‹
+          </div>
+
+        `;
+
+        item.onclick = () => {
+          openLesson(lesson);
+        };
+
+        container.appendChild(item);
+
+      });
+
+    }
+
+    /* =========================
+       LESSON VIEW
+    ========================= */
+
+    function openLesson(title) {
+
+      document.getElementById(
+        "lessonTitle"
+      ).textContent = title;
+
+      document.getElementById(
+        "articleHeading"
+      ).textContent = title;
+
+      navigate("lessonView");
+
+    }
+
+    /* =========================
+       QUIZ
+    ========================= */
+
+    const quiz = [
+
+      {
+        question:
+          "إذا كان المتتالي حسابيًا، فما الذي يبقى ثابتًا؟",
+
+        answers: [
+          "الفرق بين حدين متتاليين",
+          "حاصل ضرب الحدود",
+          "مجموع الحدود",
+          "كل الحدود متساوية"
+        ],
+
+        correct: 0
+
+      },
+
+      {
+        question:
+          "ما الرمز المستعمل غالبًا لأساس المتتالية الحسابية؟",
+
+        answers: [
+          "r",
+          "x",
+          "y",
+          "f"
+        ],
+
+        correct: 0
+
+      },
+
+      {
+        question:
+          "ماذا يجب أن تفعل قبل حل التمرين؟",
+
+        answers: [
+          "تفهم المعطيات والمطلوب",
+          "تخمن الإجابة",
+          "تترك السؤال",
+          "تحسب عشوائيًا"
+        ],
+
+        correct: 0
+
+      }
+
+    ];
+
+    let quizIndex = 0;
+    let selectedAnswer = null;
+
+    function startQuiz() {
+
+      quizIndex = 0;
+      selectedAnswer = null;
+
+      renderQuestion();
+
+      navigate("quizPage");
+
+    }
+
+    function renderQuestion() {
+
+      const question =
+        quiz[quizIndex];
+
+      selectedAnswer = null;
+
+      document.getElementById(
+        "quizQuestion"
+      ).textContent =
+        question.question;
+
+      const answers =
+        document.getElementById(
+          "quizAnswers"
+        );
+
+      answers.innerHTML = "";
+
+      question.answers.forEach(
+        (answer, index) => {
+
+          const button =
+            document.createElement("button");
+
+          button.className = "answer";
+
+          button.textContent = answer;
+
+          button.onclick = () => {
+
+            document
+              .querySelectorAll(".answer")
+              .forEach(btn => {
+                btn.classList.remove(
+                  "selected"
+                );
+              });
+
+            button.classList.add(
+              "selected"
+            );
+
+            selectedAnswer = index;
+
+          };
+
+          answers.appendChild(button);
+
+        }
+      );
+
+      const progress =
+        ((quizIndex + 1) / quiz.length) * 100;
+
+      document.getElementById(
+        "quizProgress"
+      ).style.width =
+        progress + "%";
+
+    }
+
+    function nextQuestion() {
+
+      if (selectedAnswer === null) {
+
+        showToast(
+          "اختار إجابة أولًا 👇"
+        );
+
+        return;
+      }
+
+      const correct =
+        quiz[quizIndex].correct;
+
+      const buttons =
+        document.querySelectorAll(
+          ".answer"
+        );
+
+      if (selectedAnswer === correct) {
+
+        buttons[selectedAnswer]
+          .classList.add("correct");
+
+        showToast("إجابة صحيحة 🎉");
+
+      } else {
+
+        buttons[selectedAnswer]
+          .classList.add("wrong");
+
+        buttons[correct]
+          .classList.add("correct");
+
+        showToast(
+          "الإجابة الصحيحة موضحة بالأخضر"
+        );
+
+      }
+
+      setTimeout(() => {
+
+        quizIndex++;
+
+        if (quizIndex >= quiz.length) {
+
+          showToast(
+            "كملت الاختبار! 🔥"
+          );
+
+          navigate("progressPage");
+
+          return;
+
+        }
+
+        renderQuestion();
+
+      }, 800);
+
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove("show");
+
+        }, 2200);
+
+    }
+
+    /* =========================
+       SPLASH
+    ========================= */
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        renderSubjects();
+        renderLessons();
+
+        setTimeout(() => {
+
+          document
+            .getElementById("splash")
+            .classList.add("hide");
+
+        }, 1500);
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
