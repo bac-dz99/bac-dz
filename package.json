@@ -1,1 +1,9 @@
 
+{
+  "name": "bac-dz",
+  "version": "1.0.0",
+  "description": "BAC DZ - منصة لمراجعة بكالوريا الجزائر",
+  "scripts": {
+    "build": "echo BAC DZ"
+  }
+}
