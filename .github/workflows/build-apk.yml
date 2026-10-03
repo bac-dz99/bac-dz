@@ -25,19 +25,24 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Prepare web files
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+
       - name: Install Capacitor
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Create Capacitor project
+      - name: Create Capacitor config
         run: |
-          npx cap init "BAC DZ" "dz.bac.bacdz" --web-dir .
+          npx cap init "BAC DZ" "dz.bac.bacdz" --web-dir www
 
       - name: Add Android
         run: |
           npx cap add android
 
-      - name: Copy web files
+      - name: Copy web app
         run: |
           npx cap copy android
 
